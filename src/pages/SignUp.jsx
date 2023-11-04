@@ -1,16 +1,75 @@
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import AuthInput from '../components/AuthInput';
 import { FaEnvelope, FaGithub } from 'react-icons/fa6';
-import { MdPassword } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
-import { motion } from 'framer-motion';
+import { MdPassword } from 'react-icons/md';
+import { fadeInOut } from '../animations';
+import AuthInput from '../components/AuthInput';
 import SigninButton from '../components/SigninButton';
+import { auth } from '../config/firebase.config';
+import { signInWithGitHub, signInWithGoogle } from '../utils/helpers';
 
 function SignUp() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [emailValidationStatus, setEmailValidationStatus] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+
+  const createNewUser = async () => {
+    if (emailValidationStatus) {
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(userCred => {
+          if (userCred) {
+            console.log(userCred);
+          }
+        })
+        .catch(err => {
+          console.log(err.message);
+          if (err.message.includes('auth/weak-password')) {
+            setAlert(true);
+            setAlertMsg('Password should be atleast 6 characters');
+          } else {
+            setAlert(true);
+            setAlertMsg('Sorry we are facing some issues');
+          }
+          setTimeout(() => {
+            setAlert(false);
+            setAlertMsg('');
+          }, 4000);
+        });
+    }
+  };
+
+  const loginWithEmailPassword = async () => {
+    if (emailValidationStatus) {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(userCred => {
+          if (userCred) {
+            console.log(userCred);
+          }
+        })
+        .catch(err => {
+          if (err.message.includes('invalid-login')) {
+            setAlert(true);
+            setAlertMsg('Invalid Credentials: User Not Found');
+          } else {
+            setAlert(true);
+            setAlertMsg('Temporarily disabled due to many failed logins');
+          }
+          setTimeout(() => {
+            setAlert(false);
+            setAlertMsg('');
+          }, 4000);
+        });
+    }
+  };
+
   return (
     <div className=" w-full flex flex-col items-center justify-center py-8">
       <p className="my-4">
@@ -36,8 +95,20 @@ function SignUp() {
           Icon={MdPassword}
         />
         {/* error section */}
+        <AnimatePresence>
+          {alert && (
+            <motion.p
+              className="text-red-500"
+              key={'AlertMessage'}
+              {...fadeInOut}>
+              {alertMsg}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
         {/* login btn */}
         <motion.div
+          onClick={!isLogin ? createNewUser : loginWithEmailPassword}
           whileTap={{ scale: 0.99, translateY: 2 }}
           className="hover:bg-emerald-600 text-emerald-50 px-4 py-3 rounded-md bg-emerald-500 transition cursor-pointer w-full text-center">
           {!isLogin ? 'Create an Account' : 'Login'}
@@ -69,8 +140,16 @@ function SignUp() {
           <div className="h-[1px] bg-[rgba(256,256,256,0.2)] rounded-md w-24"></div>
         </div>
         {/* google btn */}
-        <SigninButton Icon={FcGoogle} label={'Continue with Google'} />
-        <SigninButton Icon={FaGithub} label={'Continue with Github'} />
+        <SigninButton
+          Icon={FcGoogle}
+          label={'Continue with Google'}
+          onClick={signInWithGoogle}
+        />
+        <SigninButton
+          Icon={FaGithub}
+          label={'Continue with Github'}
+          onClick={signInWithGitHub}
+        />
       </div>
     </div>
   );

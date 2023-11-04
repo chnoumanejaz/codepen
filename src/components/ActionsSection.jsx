@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { FaSearchengin } from 'react-icons/fa6';
-import { AiOutlineArrowDown } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { AiOutlineArrowDown } from 'react-icons/ai';
+import { FaSearchengin } from 'react-icons/fa6';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import UserProfileDetails from './UserProfileDetails';
 
 function ActionsSection() {
-  const [user, setUser] = useState(null);
+  const user = useSelector(state => state.user?.user);
 
   return (
     <div className="w-full flex items-center justify-between gap-3">
@@ -27,14 +28,7 @@ function ActionsSection() {
           </Link>
         </motion.div>
       ) : (
-        <div className="bg-secondary px-4 py-[5px] rounded-md flex items-center gap-2 cursor-pointer">
-          <img
-            src="https://i.pravatar.cc/"
-            alt="avatar"
-            className="w-10 rounded-md"
-          />
-          <AiOutlineArrowDown className="text-3xl" />
-        </div>
+        <UserProfileDetails />
       )}
     </div>
   );

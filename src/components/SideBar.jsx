@@ -1,16 +1,19 @@
-import { useState } from 'react';
-import { HiChevronDoubleLeft } from 'react-icons/hi2';
 import { motion } from 'framer-motion';
+import { HiChevronDoubleLeft } from 'react-icons/hi2';
+import { useLocalStorageState } from '../hooks/useLocalStorage';
 import Logo from './Logo';
 import Menu from './Menu';
 
 function SideBar() {
-  const [isSideMenu, setIsSideMenu] = useState(false);
+  const [isSideMenu, setIsSideMenu] = useLocalStorageState(
+    false,
+    'sideBarCollapseInfo'
+  );
 
   return (
     <aside
       className={`w-2 ${
-        isSideMenu ? 'w-2' : 'flex-[1.2] xl:flex-[.2]'
+        isSideMenu ? 'w-2' : 'flex-[.3] xl:flex-[.3]'
       } min-h-screen max-h-screen relative bg-secondary px-3 py-6 flex flex-col items-center justify-start gap-4 transition-all duration-200 ease-in-out`}>
       <motion.div
         whileTap={{
