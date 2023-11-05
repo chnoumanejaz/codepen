@@ -4,10 +4,20 @@ import { auth, db } from './config/firebase.config';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import SignUp from './pages/SignUp';
-import { doc, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+} from 'firebase/firestore';
 import Spinner from './components/Spinner';
 import { useDispatch } from 'react-redux';
 import { SET_USER } from './context/actions/userActions';
+import NewProject from './pages/NewProject';
+import { Toaster } from 'react-hot-toast';
+import { SET_PROJECTS } from './context/actions/projectActions';
 
 function App() {
   const navigate = useNavigate();
@@ -19,7 +29,6 @@ function App() {
       if (userCred) {
         setDoc(doc(db, 'users', userCred?.uid), userCred?.providerData[0]).then(
           () => {
-            // TODO: dispatch to the store
             dispatch(SET_USER(userCred?.providerData[0]));
             navigate('/home/projects', { replace: true });
           }
@@ -32,8 +41,21 @@ function App() {
         setIsLoading(false);
       }, 1500);
     });
-
     // clean the listener even
+    return () => unSubscribe();
+  }, []);
+
+  useEffect(() => {
+    const projectsQuery = query(
+      collection(db, 'Projects'),
+      orderBy('id', 'desc')
+    );
+
+    const unSubscribe = onSnapshot(projectsQuery, querySnaps => {
+      const projectsList = querySnaps.docs.map(doc => doc.data());
+      dispatch(SET_PROJECTS(projectsList));
+    });
+
     return () => unSubscribe();
   }, []);
 
@@ -50,8 +72,10 @@ function App() {
               <Route path="*" element={<Projects />} />
               <Route path="auth" element={<SignUp />} />
             </Route>
+            <Route path="/newProject" element={<NewProject />} />
             <Route path="*" element={<Navigate to={'/home'} />} />
           </Routes>
+          <Toaster position="top-right" />
         </div>
       )}
     </>
