@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Menu() {
-  const [user, setUser] = useState(null);
+  const user = useSelector(state => state.user?.user);
   return (
     <>
       <Link to="/newProject">

@@ -1,9 +1,3 @@
-import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import { auth, db } from './config/firebase.config';
-import Home from './pages/Home';
-import Projects from './pages/Projects';
-import SignUp from './pages/SignUp';
 import {
   collection,
   doc,
@@ -12,12 +6,18 @@ import {
   query,
   setDoc,
 } from 'firebase/firestore';
-import Spinner from './components/Spinner';
-import { useDispatch } from 'react-redux';
-import { SET_USER } from './context/actions/userActions';
-import NewProject from './pages/NewProject';
+import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import Spinner from './components/Spinner';
+import { auth, db } from './config/firebase.config';
 import { SET_PROJECTS } from './context/actions/projectActions';
+import { SET_USER } from './context/actions/userActions';
+import Home from './pages/Home';
+import NewProject from './pages/NewProject';
+import Projects from './pages/Projects';
+import SignUp from './pages/SignUp';
 
 function App() {
   const navigate = useNavigate();

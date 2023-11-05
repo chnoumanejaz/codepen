@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
-import { AiOutlineArrowDown } from 'react-icons/ai';
 import { FaSearchengin } from 'react-icons/fa6';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { SET_SEARCH_QUERY } from '../context/actions/searchAction';
 import UserProfileDetails from './UserProfileDetails';
 
 function ActionsSection() {
   const user = useSelector(state => state.user?.user);
+  const searchQuery = useSelector(state =>
+    state.searchQuery?.searchQuery ? state.searchQuery.searchQuery : ''
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full flex items-center justify-between gap-3">
@@ -14,6 +19,11 @@ function ActionsSection() {
         <FaSearchengin className="text-2xl" />
         <input
           type="text"
+          value={searchQuery}
+          onChange={e => {
+            navigate('/home/projects');
+            dispatch(SET_SEARCH_QUERY(e.target.value));
+          }}
           placeholder="Start searching in to your projects ..."
           className="flex-1 px-4 py-1 bg-transparent outline-none border-none "
         />

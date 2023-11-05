@@ -16,9 +16,12 @@ function UserProfileDetails() {
   const dispatch = useDispatch();
 
   const userDetailsMenu = [
-    { id: uuidv4(), name: 'Projects', url: '/home/projects' },
-    { id: uuidv4(), name: 'Collections', url: '/home/collections' },
-    { id: uuidv4(), name: 'Profile', url: '/home/profile' },
+    { id: uuidv4(), name: 'All Projects', url: '/home/projects' },
+    {
+      id: uuidv4(),
+      name: 'About Creator',
+      url: 'https://www.linkedin.com/in/chnoumanejaz/',
+    },
   ];
 
   const handleLogOut = async () => {
@@ -36,15 +39,13 @@ function UserProfileDetails() {
         className="bg-secondary px-4 py-[5px] rounded-md flex items-center justify-center gap-2 cursor-pointer">
         <div className="w-10 h-10 flex items-center justify-center rounded-md  overflow-hidden bg-emerald-500">
           {user?.photoURL ? (
-            <>
-              <motion.img
-                whileHover={{ scale: 1.2 }}
-                src={user?.photoURL}
-                alt={user?.displayName}
-                referrerPolicy="no-referrer"
-                className="w-full h-full"
-              />
-            </>
+            <motion.img
+              whileHover={{ scale: 1.2 }}
+              src={user?.photoURL}
+              alt={user?.displayName}
+              referrerPolicy="no-referrer"
+              className="w-full h-full"
+            />
           ) : (
             <p className="text-white font-semibold uppercase tracking-wide">
               {user?.email.slice(0, 2)}

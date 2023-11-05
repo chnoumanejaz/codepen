@@ -90,15 +90,17 @@ function NewProjectHeader({ html, css, js, output }) {
                 <Link
                   to="/home/auth"
                   className="bg-emerald-600 text-white px-1 mt-1 rounded-md">
-                  Login account
+                  Login to save the project
                 </Link>
               )}
             </p>
-            <motion.p
-              whileTap={{ scale: 0.9 }}
-              className="text-sm bg-emerald-500 rounded-sm px-2 text-primary font-medium cursor-pointer">
-              + Follow
-            </motion.p>
+            {user && (
+              <motion.p
+                whileTap={{ scale: 0.9 }}
+                className="text-sm bg-emerald-500 rounded-sm px-2 text-primary font-medium cursor-pointer">
+                + Follow
+              </motion.p>
+            )}
           </div>
         </div>
       </div>
