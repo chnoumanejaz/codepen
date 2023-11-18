@@ -1,7 +1,7 @@
 # Codepen Clone 
-## React, firebase, tailwind
+### React, firebase, tailwind
 
-## Quick Demo
+### Quick Demo
 
 [Codepen-nouman.firebaseapp.com](https://codepen-clone-95087.firebaseapp.com/)
 
