@@ -35,7 +35,7 @@
 ### Cloning the repository
 
 ```shell
-git clone https://github.com/chnoumanejaz/airbnb-clone.git
+git clone https://github.com/chnoumanejaz/codepen.git
 ```
 
 ### Install packages
